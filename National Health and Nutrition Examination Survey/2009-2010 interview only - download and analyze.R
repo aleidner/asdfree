@@ -44,7 +44,7 @@ options( digits = 15 )
 
 library(foreign) # load foreign package (converts data files into R)
 library(survey)  # load survey package (analyzes complex design surveys)
-
+library(downloader) # load downloader package (reads https files, format stored on NHANES site)
 
 # set R to produce conservative standard errors instead of crashing
 # http://r-survey.r-forge.r-project.org/survey/exmample-lonely.html
@@ -65,14 +65,15 @@ options( survey.lonely.psu = "adjust" )
 
 # demographics, weighting, and complex design variables
 
-NHANES.0910.demographics.file.location <-
-	"ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/nhanes/2009-2010/demo_f.xpt"	# 2009-2010
+NHANES.0910.demographics.file.location <- 
+	"https://wwwn.cdc.gov/Nchs/Nhanes/2009-2010/DEMO_F.XPT"	 # 2009-2010
+
 
 
 # health insurance variables (from the questionnaire component)
 	
 NHANES.0910.HIQ_F.file.location <-
-	"ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/nhanes/2009-2010/HIQ_F.xpt"	# 2009-2010
+	"https://wwwn.cdc.gov/Nchs/Nhanes/2009-2010/HIQ_F.XPT"	 # 2009-2010
 	
 
 ##################################################
@@ -84,7 +85,7 @@ NHANES.0910.HIQ_F.file.location <-
 
 # download and importation function
 download.and.import.any.nhanes.file <-		# this line gives the function a name
-	function( ftp.filepath ){ 		# this line specifies the input values for the function
+	function( https.filepath ){ 		# this line specifies the input values for the function
 	
 				
 		# create a temporary file
@@ -93,9 +94,9 @@ download.and.import.any.nhanes.file <-		# this line gives the function a name
 
 
 		# download the file using the ftp.filepath specified
-		download.file( 
+		download( 
 			# download the file stored in the location designated above
-			ftp.filepath ,
+			https.filepath ,
 			# save the file as the temporary file assigned above
 			tf , 
 			# download this as a binary file type
